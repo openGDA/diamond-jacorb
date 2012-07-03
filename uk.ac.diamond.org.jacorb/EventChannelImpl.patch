@@ -1,0 +1,14 @@
+diff -ur JacORB-ORIGINAL/src/org/jacorb/events/EventChannelImpl.java JacORB/src/org/jacorb/events/EventChannelImpl.java
+--- JacORB-ORIGINAL/src/org/jacorb/events/EventChannelImpl.java	2004-05-06 13:39:58.000000000 +0100
++++ JacORB/src/org/jacorb/events/EventChannelImpl.java	2011-02-24 13:26:08.000000000 +0000
+@@ -245,6 +245,10 @@
+         {
+             pushSuppliers.removeElementAt( i );
+         }
++        catch( org.omg.CORBA.TRANSIENT t )
++        {
++            pushSuppliers.removeElementAt( i );
++        }
+       }
+     }
+ 

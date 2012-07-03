@@ -1,0 +1,55 @@
+diff -urN 2.2.2-ORIGINAL/JacORB/src/org/jacorb/naming/namemanager/ContextNode.java 2.2.2/JacORB/src/org/jacorb/naming/namemanager/ContextNode.java
+--- 2.2.2-ORIGINAL/JacORB/src/org/jacorb/naming/namemanager/ContextNode.java	2004-05-06 13:40:00.000000000 +0100
++++ 2.2.2/JacORB/src/org/jacorb/naming/namemanager/ContextNode.java	2011-03-02 16:41:02.000000000 +0000
+@@ -167,6 +167,8 @@
+ 		    objects[ --object_count ] = bindings[i];
+ 	    }
+ 				
++		sortObjectsAlphabetically(objects);
++		
+             // Compare this node's sub contexts and mark those found
+             // in the list of context bindings as used
+ 				
+@@ -305,5 +307,30 @@
+ 	    e.printStackTrace();
+ 	}
+     }
++	
++	protected void sortObjectsAlphabetically(Binding[] objects) {
++		Arrays.sort(objects, new Comparator<Binding>() {
++			
++			@Override
++			public int compare(Binding b1, Binding b2) {
++				String s1 = convertNameComponentsToString(b1.binding_name);
++				String s2 = convertNameComponentsToString(b2.binding_name);
++				return s1.compareToIgnoreCase(s2);
++			}
++			
++			
++			private String convertNameComponentsToString(NameComponent[] nc) {
++				StringBuffer sb = new StringBuffer();
++				for (int i=0; i<nc.length; i++) {
++					if (i>0) {
++						sb.append(".");
++					}
++					sb.append(nc[i].id);
++				}
++				return sb.toString();
++			}
++		});
++	}
++    
+ }
+ 
+diff -urN 2.2.2-ORIGINAL/JacORB/src/org/jacorb/naming/namemanager/NSTree.java 2.2.2/JacORB/src/org/jacorb/naming/namemanager/NSTree.java
+--- 2.2.2-ORIGINAL/JacORB/src/org/jacorb/naming/namemanager/NSTree.java	2004-05-06 13:40:00.000000000 +0100
++++ 2.2.2/JacORB/src/org/jacorb/naming/namemanager/NSTree.java	2011-03-02 16:41:06.000000000 +0000
+@@ -37,7 +37,7 @@
+ public class NSTree
+     extends JTree 
+ {
+-    public static final int MAX_BIND = 40;
++    public static final int MAX_BIND = Integer.MAX_VALUE;
+     private NamingContextExt rootContext;
+     private ContextNode rootNode;
+     private Dimension size;

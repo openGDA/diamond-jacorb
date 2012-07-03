@@ -1,0 +1,43 @@
+<project name="Rebuild jacorb.jar" default="rebuild">
+
+	<target name="rebuild">
+		
+		<property name="tempdir" value="build" />
+		<property name="jardir" value="${tempdir}/jar" />
+		<property name="pluginjar" value="jars/jacorb.jar" />
+		
+		<echo message="Creating temp directory" />
+		<delete dir="${tempdir}" />
+		<mkdir dir="${tempdir}" />
+		
+		<echo message="Unpacking original JacORB distribution" />
+		<untar compression="gzip" dest="${tempdir}" src="JacORB-2_2_2-full.tar.gz" />
+		
+		<echo message="Unpacking original jacorb.jar" />
+		<unzip dest="${jardir}" src="${tempdir}/JacORB/lib/jacorb.jar" />
+		
+		<echo message="Applying patches" />
+		<patch dir="${tempdir}/JacORB" strip="1" patchfile="EventChannelImpl.patch" />
+		<patch dir="${tempdir}/JacORB" strip="2" patchfile="namemanager.patch" />
+		
+		<echo message="Compiling patched code" />
+		<javac srcdir="${tempdir}/JacORB/src" includes="org/jacorb/events/EventChannelImpl.java" classpath="${tempdir}/JacORB/lib/jacorb.jar" destdir="${jardir}">
+			<include name="org/jacorb/events/EventChannelImpl.java" />
+			<include name="org/jacorb/naming/namemanager/ContextNode.java" />
+			<include name="org/jacorb/naming/namemanager/NSTree.java" />
+		</javac>
+		
+		<echo message="Deleting jacorb.jar from plugin" />
+		<delete file="${pluginjar}" />
+		
+		<echo message="Building new jacorb.jar" />
+		<jar destfile="${pluginjar}" basedir="${jardir}" manifest="${tempdir}/jar/META-INF/MANIFEST.MF" />
+		
+		<echo message="Deleting temp directory" />
+		<delete dir="${tempdir}" />
+		
+		<echo message="Done." />
+		
+	</target>
+
+</project>
