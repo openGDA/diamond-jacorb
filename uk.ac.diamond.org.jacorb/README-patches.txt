@@ -4,6 +4,6 @@ EventChannelImpl.patch
 
 namemanager.patch
     - Causes all entries to be shown in the NameManager, instead of just the
-      first 40.
+      first 40. (See also https://www.jacorb.org/bugzilla/show_bug.cgi?id=647)
     - Causes entries in the NameManager to be shown in alphabetical order
       (ignoring case).
