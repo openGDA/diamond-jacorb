@@ -5,7 +5,7 @@ in there.
 A bug was reported against JacORB on 2005-04-26 that resulted in a change in
 behaviour:
 
-  http://www.jacorb.org/cgi-bin/bugzilla/show_bug.cgi?id=595
+  https://www.jacorb.org/bugzilla/show_bug.cgi?id=595
 
 Now '/etc' is *not* appended to jacorb.config.dir.
 
